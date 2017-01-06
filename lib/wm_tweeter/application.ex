@@ -8,6 +8,21 @@ defmodule WmTweeter.Application do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+    :ets.new(:tweets, [:public, :named_table, :ordered_set, read_concurrency: true, write_concurrency: true])
+
+    :ets.insert(:tweets,
+                [
+                  {now(), [avatar: "http://upload.wikimedia.org/wikipedia/en/thumb/f/f4/The_Wire_Jimmy_McNulty.jpg/250px-The_Wire_Jimmy_McNulty.jpg",
+                         message: "Pawns.",
+                         time: timestamp()]},
+                 {now(), [avatar: "http://upload.wikimedia.org/wikipedia/en/thumb/1/15/The_Wire_Bunk.jpg/250px-The_Wire_Bunk.jpg",
+                         message: "A man's gotta have a code.",
+                         time: timestamp()]},
+                 {now(), [avatar: "http://upload.wikimedia.org/wikipedia/en/thumb/f/f4/The_Wire_Jimmy_McNulty.jpg/250px-The_Wire_Jimmy_McNulty.jpg",
+                         message: "You boys have a taste?",
+                         time: timestamp()]}
+                ])
+
     wm_config = Application.get_env(:wm_tweeter, :web_config)
     # Define workers and child supervisors to be supervised
     children = [
@@ -21,4 +36,7 @@ defmodule WmTweeter.Application do
     opts = [strategy: :one_for_one, name: WmTweeter.Supervisor]
     Supervisor.start_link(children, opts)
   end
+
+  defp now, do: :erlang.monotonic_time()
+  defp timestamp, do: :erlang.timestamp()
 end

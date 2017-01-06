@@ -33,7 +33,7 @@ defmodule WmTweeter.Resources.Assets do
       [
         {'identity', &(&1)},
         {'gzip', &:zlib.gzip/1},
-        'deflate', &:zlib.zip/1}
+        {'deflate', &:zlib.zip/1}
       ],
       req_data, state
     }
@@ -44,7 +44,7 @@ defmodule WmTweeter.Resources.Assets do
   end
 
   def generate_etag(req_data, %{fileinfo: finfo} = state) do
-    hash = {finfo.indoe, finfo.mtime}
+    hash = {finfo.inode, finfo.mtime}
       |> :erlang.phash2
       |> :mochihex.to_hex
     {hash, req_data, state}

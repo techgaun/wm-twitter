@@ -1,7 +1,7 @@
 # This file is responsible for configuring your application
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
-alias WmTweeter.Resources.{Hello, Assets}
+alias WmTweeter.Resources.{Hello, Assets, TweetList}
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
@@ -34,6 +34,7 @@ config :wm_tweeter, :web_config,
   ip: {127, 0, 0, 1},
   port: 4000,
   dispatch: [
+    {['tweets'], TweetList, []},
     {[:hello], Hello, []},
     {[:*], Assets, []}
   ]
